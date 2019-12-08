@@ -11,13 +11,13 @@ class Store(Resource):
 
     def post(self, name):
         if StoreModel.find_by_name(name):
-            return {'message': "A store with name '{}' already exists".format(name)}, 400
+            return {'message': "A store with name '{}' already exists.".format(name)}, 400
 
         store = StoreModel(name)
         try:
             store.save_to_db()
         except:
-            return {'message': 'An error occurred while creating the store.'}, 500
+            return {"message": "An error occurred creating the store."}, 500
 
         return store.json(), 201
 
@@ -31,10 +31,10 @@ class Store(Resource):
 
 class StoreList(Resource):
     def get(self):
-        return {'stores': [store.json() for store in StoreModel.query.all()]}
+        return {'stores': [x.json() for x in StoreModel.find_all()]}
 
     def delete(self):
-        for store in StoreModel.query.all():
+        for store in StoreModel.find_all():
             store.delete_from_db()
 
         return {'message': 'Stores deleted'}
